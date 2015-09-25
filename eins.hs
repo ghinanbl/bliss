@@ -69,7 +69,8 @@ zipWith' x = x
 
 --pembatas
 
-nth' x = x
+nth'(x:xs) 0 = x
+nth'(x:xs) y = nth' xs (y-1)
 
 --pembatas
 
@@ -81,11 +82,19 @@ scanl1' x = x
 
 --pembatas
 
-elem' x = x
+elem' _ [] = False
+elem' y (x:xs)
+    | y == x = True
+    | y /= x = elem' y xs
+    | otherwise = False
 
 --pembatas
 
-notElem' x = x
+notElem' _ [] = True
+notElem' y (x:xs)
+  | y == x = False
+  | y /= x = notElem' y xs
+  | otherwise = True
 
 --pembatas
 head' (x:xs) = x
@@ -125,10 +134,11 @@ min' x y
 --pembatas
 
 concat' [] = []
+concat' [(x:xs)] = (x:xs)
 
 --pembatas
-
-intersperse' x = x
+intersperse' _ [] = []
+intersperse' y (x:xs) = [x] : [y] : intersperse' y xs
 
 --pembatas
 intercalate' [] [(x:xs)] = (x:xs)
@@ -137,14 +147,16 @@ intercalate' (y:ys) [(x:xs)] = (x:xs)
 --pembatas
 
 and' [] = True
---and' (x:xs)
---  | x == True = True
---  | otherwise =
-
+and' (x:xs)
+  | x == False = False
+  | otherwise = and' xs
 
 --pembatas
 
 or' [] = False
+or' (x:xs)
+  | x == True = True
+  | otherwise = or' xs
 
 --pembatas
 
@@ -193,15 +205,24 @@ concatMap' x = x
 
 --pembatas
 
-all' x = x
+all' f [] = True
+all' f (x:xs)
+  | f x == False = False
+  | otherwise = all' f (xs)
 
 --pembatas
 
-any' x = x
+any' f [] = False
+any' f (x:xs)
+  | f x == True = True
+  | otherwise = any' f xs
 
 --pembatas
 
-insert' x = x
+insert' y [] = [y]
+insert' y (x:xs)
+  | y <= x = y : (x:xs)
+  | otherwise = x : insert' y xs
 
 --pembatas
 
@@ -232,7 +253,8 @@ init' (x:xs) = x : init' (xs)
 
 --pembatas
 
-tails' x = x
+tails' [] = [[]]
+tails' (x:xs) = (x:xs) : tails' xs
 
 --pembatas
 
